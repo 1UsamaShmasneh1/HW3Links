@@ -1,13 +1,12 @@
-import logo from './logo.svg';
+
 import './App.css';
-import Links from './Links';
 import LinksList from './LinksList';
-import React,{useState} from 'react';
+import React from 'react';
 
 
 const AppLinks = () => {
 
-  let links = [{link:"link3", canUpdate:false}, {link:"link1", canUpdate:false}, {link:"link2", canUpdate:false}]
+  let links = [{link:"link3"}, {link:"link1"}, {link:"link2"}]
 
   return (
     <div>
