@@ -7,44 +7,53 @@ export default class LinksList extends React.Component{
         this.state= {links:props.links,
                         editValue:"",
                         addValue:"",
-                        IsEditing:false, 
-                        isSorted:false}
+                        isSorted:false,
+                        counter:3
+                    }
     }
 
     onAdd = (e) => {
         e.preventDefault()
-        const link = {link: this.state.addValue}
+        const link = {link: this.state.addValue, isEditing: false}
         if(this.state.addValue !== ""){
             this.setState({links: this.state.links.concat(link)})
             this.setState({addValue: ""})
         }
     }
 
-    onEdit = (e) => {
-        this.setState({IsEditing: true})
-    }
-
-    onDelete = (linkStr) =>{
-        this.setState({
-            links: [...this.state.links].filter((l) => l.link !== linkStr)
-        })
-    }
-
-    onSave = (e) => {
-        e.preventDefault()
-        this.onSaveChanges(this.state.links[e.target.key].link)
-    }
-
-    onSaveChanges = (link) => {
-        this.state.links.map((l) => {
-            if(l.link === link){
-                l.link = this.state.editValue
-                return l
+    onEdit = (i) => {
+        let links = [...this.state.links]
+        links.map((l) => {
+            if(l.id === i){
+                if(l.isEditing)
+                    l.isEditing = false
+                else
+                    l.isEditing = true
             }
             return l
         })
-        this.setState({editValue : ""})
-        this.setState({IsEditing : false})
+        this.setState({links: links})
+    }
+
+    onDelete = (i) =>{
+        let links = [...this.state.links]
+        links = links.filter((l) => l.id !== i)
+        this.setState({links: links})
+    }
+
+    onSave = (e,i) => {
+        e.preventDefault()
+        let links = [...this.state.links]
+        let value = this.state.editValue
+        links.map((l) => {
+            if(l.id === i){
+                if(value !== "")
+                    l.link = value
+                l.isEditing = false
+            }
+            return l
+        })
+        this.setState({links: links})
     }
 
     onSort = (e) => {}
@@ -59,14 +68,14 @@ export default class LinksList extends React.Component{
  
 
     render(){
-        let liList = this.state.links.map((link, index) => <li key={index}>
-                                                                <Links link={link.link} />
-                                                                {this.state.IsEditing && <form onSubmit={this.onSave}>
+        const liList = this.state.links.map((link, index) => <li key={index}>
+                                                                <Links id = {link.id} link = {link.link} isEditing = {link.isEditing} />
+                                                                {link.isEditing && <form onSubmit={(e) => {this.onSave(e,link.id)}}>
                                                                     <input onChange={this.onChangeEditValue} />
                                                                     <button type="submit">Save</button>
                                                                 </form>}  
-                                                                <button onClick={this.onEdit} >Edit</button>
-                                                                <button onClick={() => this.onDelete(link.link)} >Delete</button>
+                                                                <button onClick={() => {this.onEdit(link.id)}} key = {index} >Edit</button>
+                                                                <button onClick={() => {this.onDelete(link.id)}} >Delete</button>
                                                             </li>)
         return(
             <div>

@@ -3,7 +3,7 @@ import React from "react";
 export default class Links extends React.Component{
     constructor(props){
         super(props)
-        this.state = {link: props.link}        
+        this.state = {id:props.id, link: props.link, isEditing: props.isEditing}        
     }
 
     render(){
