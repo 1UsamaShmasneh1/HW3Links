@@ -54,6 +54,7 @@ export default class LinksList extends React.Component{
             return l
         })
         this.setState({links: links})
+        this.setState({editValue: ""})
     }
 
     onSort = (e) => {}
@@ -70,17 +71,17 @@ export default class LinksList extends React.Component{
     render(){
         const liList = this.state.links.map((link, index) => <li key={index}>
                                                                 <Links id = {link.id} link = {link.link} isEditing = {link.isEditing} />
-                                                                {link.isEditing && <form onSubmit={(e) => {this.onSave(e,link.id)}}>
-                                                                    <input onChange={this.onChangeEditValue} />
+                                                                {link.isEditing && <form onSubmit={(e) => this.onSave(e,link.id)}>
+                                                                    <input value={this.state.editValue} onChange={this.onChangeEditValue} />
                                                                     <button type="submit">Save</button>
                                                                 </form>}  
-                                                                <button onClick={() => {this.onEdit(link.id)}} key = {index} >Edit</button>
-                                                                <button onClick={() => {this.onDelete(link.id)}} >Delete</button>
+                                                                <button onClick={() => this.onEdit(link.id)} >Edit</button>
+                                                                <button onClick={() => this.onDelete(link.id)} >Delete</button>
                                                             </li>)
         return(
             <div>
                 <form onSubmit={this.onAdd}>
-                   Link: <input onChange={this.onChangeAddValue} />
+                   Link: <input value={this.state.addValue} onChange={this.onChangeAddValue} />
                    <button type="submit">Add</button>
                 </form>
                 <br />
